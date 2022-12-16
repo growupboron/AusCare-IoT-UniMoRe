@@ -1,59 +1,171 @@
-from azure.cognitiveservices.vision.computervision import ComputerVisionClient
-from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
-from azure.cognitiveservices.vision.computervision.models import VisualFeatureTypes
-from msrest.authentication import CognitiveServicesCredentials
-
-from array import array
+import asyncio
+import io
 import os
-from PIL import Image
 import sys
 import time
+import uuid
+import requests
+from urllib.parse import urlparse
+from io import BytesIO
+# To install this module, run:
+# python -m pip install Pillow
+from PIL import Image, ImageDraw
+from azure.cognitiveservices.vision.face import FaceClient
+from msrest.authentication import CognitiveServicesCredentials
+from azure.cognitiveservices.vision.face.models import TrainingStatusType, Person, QualityForRecognition
+
+# This key will serve all examples in this document.
+KEY = "de29dac78128429b95650c1c1d954d51"
+
+# This endpoint will be used in all examples in this quickstart.
+ENDPOINT = "https://iotauscare.cognitiveservices.azure.com"
+
+# Base url for the Verify and Facelist/Large Facelist operations
+IMAGE_BASE_URL = 'https://img.freepik.com/premium-photo/cute-caucasian-child-little-boy-smile-make-happy-face-human-emotions-children_183219-8827.jpg?w=2000'
+
+# Used in the Person Group Operations and Delete Person Group examples.
+# You can call list_person_groups to print a list of preexisting PersonGroups.
+# SOURCE_PERSON_GROUP_ID should be all lowercase and alphanumeric. For example, 'mygroupname' (dashes are OK).
+PERSON_GROUP_ID = str(uuid.uuid4())  # assign a random ID (or name it anything)
+
+# Used for the Delete Person Group example.
+TARGET_PERSON_GROUP_ID = str(uuid.uuid4())  # assign a random ID (or name it anything)
+
+# Create an authenticated FaceClient.
+face_client = FaceClient(ENDPOINT, CognitiveServicesCredentials(KEY))
 
 '''
-Authenticate
-Authenticates your credentials and creates a client.
+Create the PersonGroup
 '''
-subscription_key = "eaa198af4057457daf715175bfeeeea8"
-endpoint = "https://auscareiot.cognitiveservices.azure.com/"
+# Create empty Person Group. Person Group ID must be lower case, alphanumeric, and/or with '-', '_'.
+print('Person group:', PERSON_GROUP_ID)
+face_client.person_group.create(person_group_id=PERSON_GROUP_ID, name=PERSON_GROUP_ID,
+                                recognition_model='recognition_04')
 
-computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(subscription_key))
+# Define woman friend
+woman = face_client.person_group_person.create(PERSON_GROUP_ID, name="Woman")
+# Define man friend
+man = face_client.person_group_person.create(PERSON_GROUP_ID, name="Man")
+# Define child friend
+child = face_client.person_group_person.create(PERSON_GROUP_ID, name="Child")
+
 '''
-END - Authenticate
+Detect faces and register them to each person
 '''
+# Find all jpeg images of friends in working directory (TBD pull from web instead)
+woman_images = [
+    "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-sample-data-files/master/Face/images/Family1-Mom1.jpg",
+    "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-sample-data-files/master/Face/images/Family1-Mom2.jpg"]
+man_images = [
+    "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-sample-data-files/master/Face/images/Family1-Dad1.jpg",
+    "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-sample-data-files/master/Face/images/Family1-Dad2.jpg"]
+child_images = [
+    "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-sample-data-files/master/Face/images/Family1-Son1.jpg",
+    "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-sample-data-files/master/Face/images/Family1-Son2.jpg"]
+
+# Add to woman person
+for image in woman_images:
+    # Check if the image is of sufficent quality for recognition.
+    sufficientQuality = True
+    detected_faces = face_client.face.detect_with_url(url=image, detection_model='detection_03',
+                                                      recognition_model='recognition_04',
+                                                      return_face_attributes=['qualityForRecognition'])
+    for face in detected_faces:
+        if face.face_attributes.quality_for_recognition != QualityForRecognition.high:
+            sufficientQuality = False
+            break
+        face_client.person_group_person.add_face_from_url(PERSON_GROUP_ID, woman.person_id, image)
+        print("face {} added to person {}".format(face.face_id, woman.person_id))
+
+    if not sufficientQuality: continue
+
+# Add to man person
+for image in man_images:
+    # Check if the image is of sufficent quality for recognition.
+    sufficientQuality = True
+    detected_faces = face_client.face.detect_with_url(url=image, detection_model='detection_03',
+                                                      recognition_model='recognition_04',
+                                                      return_face_attributes=['qualityForRecognition'])
+    for face in detected_faces:
+        if face.face_attributes.quality_for_recognition != QualityForRecognition.high:
+            sufficientQuality = False
+            break
+        face_client.person_group_person.add_face_from_url(PERSON_GROUP_ID, man.person_id, image)
+        print("face {} added to person {}".format(face.face_id, man.person_id))
+
+    if not sufficientQuality: continue
+
+# Add to child person
+for image in child_images:
+    # Check if the image is of sufficent quality for recognition.
+    sufficientQuality = True
+    detected_faces = face_client.face.detect_with_url(url=image, detection_model='detection_03',
+                                                      recognition_model='recognition_04',
+                                                      return_face_attributes=['qualityForRecognition'])
+    for face in detected_faces:
+        if face.face_attributes.quality_for_recognition != QualityForRecognition.high:
+            sufficientQuality = False
+            print("{} has insufficient quality".format(face))
+            break
+        face_client.person_group_person.add_face_from_url(PERSON_GROUP_ID, child.person_id, image)
+        print("face {} added to person {}".format(face.face_id, child.person_id))
+    if not sufficientQuality: continue
 
 '''
-OCR: Read File using the Read API, extract text - remote
-This example will extract text in an image, then print results, line by line.
-This API call can also extract handwriting style text (not shown).
+Train PersonGroup
 '''
-print("===== Read File - remote =====")
-# Get an image with text
-read_image_url = "https://img.freepik.com/premium-photo/cute-caucasian-child-little-boy-smile-make-happy-face-human-emotions-children_183219-8827.jpg?w=2000"
+# Train the person group
+print("pg resource is {}".format(PERSON_GROUP_ID))
+rawresponse = face_client.person_group.train(PERSON_GROUP_ID, raw=True)
+print(rawresponse)
 
-# Call API with URL and raw response (allows you to get the operation location)
-read_response = computervision_client.read(read_image_url, raw=True)
-
-# Get the operation location (URL with an ID at the end) from the response
-read_operation_location = read_response.headers["Operation-Location"]
-# Grab the ID from the URL
-operation_id = read_operation_location.split("/")[-1]
-
-# Call the "GET" API and wait for it to retrieve the results
-while True:
-    read_result = computervision_client.get_read_result(operation_id)
-    if read_result.status not in ['notStarted', 'running']:
+while (True):
+    training_status = face_client.person_group.get_training_status(PERSON_GROUP_ID)
+    print("Training status: {}.".format(training_status.status))
+    print()
+    if (training_status.status is TrainingStatusType.succeeded):
         break
-    time.sleep(1)
+    elif (training_status.status is TrainingStatusType.failed):
+        face_client.person_group.delete(person_group_id=PERSON_GROUP_ID)
+        sys.exit('Training the person group has failed.')
+    time.sleep(5)
 
-# Print the detected text, line by line
-if read_result.status == OperationStatusCodes.succeeded:
-    for text_result in read_result.analyze_result.read_results:
-        for line in text_result.lines:
-            print(line.text)
-            print(line.bounding_box)
+'''
+Identify a face against a defined PersonGroup
+'''
+# Group image for testing against
+test_image = "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-sample-data-files/master/Face/images/identification1.jpg"
+
+print('Pausing for 10 seconds to avoid triggering rate limit on free account...')
+time.sleep(10)
+
+# Detect faces
+face_ids = []
+# We use detection model 3 to get better performance, recognition model 4 to support quality for recognition attribute.
+faces = face_client.face.detect_with_url(test_image, detection_model='detection_03', recognition_model='recognition_04',
+                                         return_face_attributes=['qualityForRecognition'])
+for face in faces:
+    # Only take the face if it is of sufficient quality.
+    if face.face_attributes.quality_for_recognition == QualityForRecognition.high or face.face_attributes.quality_for_recognition == QualityForRecognition.medium:
+        face_ids.append(face.face_id)
+
+# Identify faces
+results = face_client.face.identify(face_ids, PERSON_GROUP_ID)
+print('Identifying faces in image')
+if not results:
+    print('No person identified in the person group')
+for identifiedFace in results:
+    if len(identifiedFace.candidates) > 0:
+        print('Person is identified for face ID {} in image, with a confidence of {}.'.format(identifiedFace.face_id,
+                                                                                              identifiedFace.candidates[
+                                                                                                  0].confidence))  # Get topmost confidence score
+
+        # Verify faces
+        verify_result = face_client.face.verify_face_to_person(identifiedFace.face_id,
+                                                               identifiedFace.candidates[0].person_id, PERSON_GROUP_ID)
+        print('verification result: {}. confidence: {}'.format(verify_result.is_identical, verify_result.confidence))
+    else:
+        print('No person identified for face ID {} in image.'.format(identifiedFace.face_id))
+
 print()
-'''
-END - Read File - remote
-'''
-
-print("End")
+print('End.')
