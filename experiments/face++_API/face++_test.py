@@ -28,8 +28,9 @@ image_urls = [
 'https://img.freepik.com/free-photo/senior-man-black-tee-portrait_53876-129945.jpg?w=1480&t=st=1671221878~exp=1671222478~hmac=c3b27f53250760966d44c9f59e99377f5bdf0cdb50817c2b99ac31cc5badd2cb',
 'https://media.istockphoto.com/id/527879691/it/foto/paura-uomo.jpg?s=612x612&w=is&k=20&c=-ojjxqOe8hDae9zawJTDO1CcvmDppTk6NYffavidvug='
 ]
-
+print('Testing Face++ API..')
 # make a post request to the API
+start = time.time()
 for image_url in image_urls:
     response = requests.post(API, data={'api_key': API_KEY, 'api_secret': API_SECRET, 'image_url': image_url}, params={'return_attributes':'emotion'})
     print({f'face #{i}': face.get('attributes').get('emotion') for i, face in enumerate(response.json().get('faces'))},
@@ -37,4 +38,6 @@ for image_url in image_urls:
     # get only the emotions data for the first face detected
 
     emotions = response.json().get('faces')[0].get('attributes').get('emotion')
-    print(f'Emotion: {emotion_mapper(emotions)}', end='\n\n')
+    print(f'Emotion: {emotion_mapper(emotions)}',)
+
+print(f'\nEnded.\nTime of execution: {time.time()-start:.2} s')
