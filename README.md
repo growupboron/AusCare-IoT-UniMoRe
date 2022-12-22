@@ -1,9 +1,9 @@
 # AusCare-IoT-UniMoRe
 
-## Install the required packages
+## Install the required packages for the flask application
 
 ```bash
-pip install -r requirements.txt
+pip install -r webapp/requirements.txt
 ```
 ## Run the application
 
