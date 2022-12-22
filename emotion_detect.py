@@ -55,7 +55,6 @@ def emotion_detect():
             #time.sleep(5)
 
 
-# Some photos to test with
 thread = Thread(target=emotion_detect)
 
 pat = Patient(1, 'Billy', 10, 0, None, None)
