@@ -44,7 +44,7 @@ class Patient(object):
         con = sqlite3.connect(DB_PATH)
         c = con.cursor()
         # if the table patients does not exist, create it
-        c.execute("CREATE TABLE IF NOT EXISTS patients (patient_id integer PRIMARY KEY, name text, age integer, "
+        c.execute("CREATE TABLE IF NOT EXISTS patients (id integer PRIMARY KEY, name text, age integer, "
                   "people_counter integer, last_emotion text, last_timestamp text)")
         c.execute("SELECT people_counter FROM patients WHERE id = ?", (self.patient_id,))
 
