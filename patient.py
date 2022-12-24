@@ -74,9 +74,9 @@ class Patient(object):
         timestamp = datetime.datetime.now()
         emoji = ''
         # driver code for st7735 display
-        disp = ST7735.ST7735(port=0, cs=0, dc=24, backlight=None, rst=25, width=80, height=160, rotation=90, invert=True)
-        WIDTH = disp.width
-        HEIGHT = disp.height
+        disp = ST7735.ST7735(port=0, cs=0, dc=24, backlight=None, rst=25, width=80, height=160, rotation=90, invert=True) # Comment if not on RPi
+        WIDTH = disp.width      # Comment if not on RPi
+        HEIGHT = disp.height    # Comment if not on RPi
         if emotion == "happiness":
             emoji = '😃'
             img = Image.open("emojis/happy.png")
@@ -99,8 +99,8 @@ class Patient(object):
             emoji = '😑'
             img = Image.open("emojis/neutral.png")
             
-        img = img.resize((WIDTH,HEIGHT))
+        img = img.resize((WIDTH,HEIGHT)) # Comment if not on RPi
         img.show()
-        disp.display(img)
+        disp.display(img) # Comment if not on RPi
         self.update(emotion, timestamp)
         return timestamp, emoji

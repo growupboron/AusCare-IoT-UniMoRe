@@ -19,7 +19,6 @@ def emotion_mapper(pat, emotion_list):
 
 def take_photo():
     # take a photo with the camera
-    # camera = cv2.VideoCapture(0) # for testing purposes
     camera = PiCamera()
     camera.start_preview()
     camera.resolution = (640, 480) # need a well lit room
@@ -33,6 +32,7 @@ def take_photo():
 def emotion_detect():
     while True:
         # real-time emotion detection with the R-Pi
+        # Comment if not on RPi
         # take a photo
         take_photo()
         # encode the image
