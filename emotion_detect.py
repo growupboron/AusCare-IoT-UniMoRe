@@ -22,7 +22,7 @@ def take_photo():
     # camera = cv2.VideoCapture(0) # for testing purposes
     camera = PiCamera()
     camera.start_preview()
-    camera.resolution = (320, 240)
+    camera.resolution = (640, 480) # need a well lit room
     time.sleep(3)
     # vertically flipping image as PiCam is mounted invertly
     camera.capture('images/face_flipped.jpeg') 

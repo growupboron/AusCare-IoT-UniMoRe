@@ -2,9 +2,10 @@ import datetime
 import os
 import random
 import sqlite3
+from PIL import Image
+import ST7735
 
 DB_PATH = 'patients.db'
-
 
 # generates a list of all patients in the database
 def get_all_patients():
@@ -67,26 +68,39 @@ class Patient(object):
                        (self.people_counter, emotion, timestamp, self.patient_id))
         con.commit()
         con.close()
-
+    
     def mapper(self, emotion):
         self.people_counter += 1
         timestamp = datetime.datetime.now()
-
         emoji = ''
-
+        # driver code for st7735 display
+        disp = ST7735.ST7735(port=0, cs=0, dc=24, backlight=None, rst=25, width=80, height=160, rotation=90, invert=True)
+        WIDTH = disp.width
+        HEIGHT = disp.height
         if emotion == "happiness":
             emoji = '😃'
+            img = Image.open("emojis/happy.png")
         elif emotion == "sadness":
             emoji = '😔'
+            img = Image.open("emojis/sad.png")
         elif emotion == "anger":
             emoji = '😠'
+            img = Image.open("emojis/anger.png")
         elif emotion == "surprise":
             emoji = '😮'
+            img = Image.open("emojis/surprise.png")
         elif emotion == "disgust":
             emoji = '🤮'
+            img = Image.open("emojis/disgust.png")
         elif emotion == "fear":
             emoji = '😨'
+            img = Image.open("emojis/fear.png")
         elif emotion == "neutral":
             emoji = '😑'
+            img = Image.open("emojis/neutral.png")
+            
+        img = img.resize((WIDTH,HEIGHT))
+        img.show()
+        disp.display(img)
         self.update(emotion, timestamp)
         return timestamp, emoji
