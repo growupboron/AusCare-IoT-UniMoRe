@@ -12,7 +12,7 @@ from picamera import PiCamera
 
 def emotion_mapper(pat, emotion_list):
     '''
-    returns the emoji with the highest confidence
+    returns the emotion and emoji with the highest confidence
     '''
     emotion = max(emotion_list, key=emotion_list.get)
     return emotion, pat.mapper(emotion)
@@ -45,7 +45,7 @@ def emotion_detect():
         print(f'timestamp: {emoticon[0]}, Emotion: {emotion}, Emoji: {emoticon[1]}, FaceID: {faceID}')
 
         '''
-        # for testing purposes
+        # for testing purposes w/o picam
         for image in encoded_images:
             response = requests.post(API, data={'api_key': API_KEY, 'api_secret': API_SECRET, 'image_base64': image},
                                      params={'return_attributes': 'emotion'})
@@ -53,6 +53,7 @@ def emotion_detect():
                 print(response.json())
             # get only the emotions data for the first face detected
 
+            faceID = emotions = response.json().get('faces')[0].get('face_token') #Used for number of people met
             emotions = response.json().get('faces')[0].get('attributes').get('emotion')
             emotion, emoticon = emotion_mapper(pat, emotions)
             print(f'timestamp: {emoticon[0]}, Emotion: {emotion}, Emoji: {emoticon[1]}, FaceID: {faceID}')
