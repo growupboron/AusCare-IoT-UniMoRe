@@ -22,10 +22,13 @@ def take_photo():
     # camera = cv2.VideoCapture(0) # for testing purposes
     camera = PiCamera()
     camera.start_preview()
-    camera.resolution = (160, 120)
+    camera.resolution = (320, 240)
     time.sleep(3)
-    camera.capture('images/face.jpeg')
-
+    # vertically flipping image as PiCam is mounted invertly
+    camera.capture('images/face_flipped.jpeg') 
+    capture = cv2.imread('images/face_flipped.jpeg')
+    capture = cv2.flip(capture,0)
+    cv2.imwrite('images/face.jpeg', capture)
 
 def emotion_detect():
     while True:
