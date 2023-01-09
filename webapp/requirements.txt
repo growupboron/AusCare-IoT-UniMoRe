@@ -6,3 +6,4 @@ Flask-Security>=1.7.5
 enum34==1.1.6
 email_validator
 Flask-Login
+flask-ngrok2
