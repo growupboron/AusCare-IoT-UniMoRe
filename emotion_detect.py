@@ -8,7 +8,7 @@ from config import API_KEY, API_SECRET, API, DEBUG
 import patient
 from patient import Patient
 import cv2
-from picamera import PiCamera
+from picamera import PiCamera                           # Comment if not on RPi
 
 def emotion_mapper(pat, emotion_list):
     '''

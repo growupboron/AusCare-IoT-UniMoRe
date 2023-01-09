@@ -3,7 +3,7 @@ import os
 import random
 import sqlite3
 from PIL import Image
-import ST7735
+import ST7735                       # Comment if not on RPi
 
 DB_PATH = 'patients.db'
 
