@@ -52,8 +52,8 @@ def sign_up():
         elif len(first_name) < 2:
 
             flash('First name must be greater than 1 character.', category='error')
-        elif role not in ['Admin', 'User', 'Doctor']:
-            flash('Role must be Admin, User or Doctor.', category='error')
+        elif role not in ['Admin', 'User', 'Supervisor']:
+            flash('Role must be Admin, User or Supervisor.', category='error')
         elif password1 != password2:
             flash('Passwords don\'t match.', category='error')
         elif len(password1) < 7:

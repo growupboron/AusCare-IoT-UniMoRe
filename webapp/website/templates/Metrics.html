@@ -1,6 +1,9 @@
-{% extends "base.html" %} {% block title %}Activities{% endblock %}
+{% extends "base.html" %}
+{% block title %}Metrics{% endblock %}
 
 {% block content %}
+<h1 align="center">Metrics</h1>
+
 <div id="mySidebar" class="sidebar">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <a href="/activities">Activities</a>
@@ -53,7 +56,6 @@
 
 /* The button used to open the sidebar */
 .openbtn {
-  float: left;
   font-size: 20px;
   cursor: pointer;
   background-color: #111;
@@ -92,28 +94,4 @@ function closeNav() {
 }
 </script>
 
-<table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Patient ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Emotion</th>
-                            <th scope="col">Timestamp</th>
-                            <th scope="col">People Encountered</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for patient in patients %}
-
-                        <tr>
-                            <td>{{ patient.patient_id}}</td>
-                            <td>{{ patient.name }}</td>
-                            <td>{{ patient.last_emotion }}</td>
-                            <td>{{ patient.last_timestamp }}</td>
-                            <td>{{ patient.people_counter }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-
-{% endblock %}
+{% endblock%}
