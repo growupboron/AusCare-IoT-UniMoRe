@@ -95,6 +95,7 @@ function closeNav() {
 
 <h3 align="left"><b>User Metrics</b></h3>
 
+<!--
 <head>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
@@ -124,6 +125,23 @@ function closeNav() {
 </head>
 <body>
   <div id="curve_chart" style="width: 900px; height: 500px"></div>
+</body>
+-->
+
+<head>
+    <title>Line Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+</head>
+<body>
+    <canvas id="line-chart"></canvas>
+    <script>
+        var ctx = document.getElementById('line-chart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {{ chart_data|tojson|safe }},
+            options: {}
+        });
+    </script>
 </body>
 
 {% endblock %}

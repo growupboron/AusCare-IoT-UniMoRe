@@ -9,7 +9,6 @@ import time
 
 DB_PATH = '../patients.db'
 
-
 # generates a list of all patients in the database
 def get_all_patients():
     conn = sqlite3.connect(DB_PATH)

@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, send_file
 from flask_login import login_required
 from flask_security import current_user
-
+import sqlite3
+import pandas as pd
 from .patient import Patient
 from .patient import get_all_patients
 
@@ -64,7 +65,22 @@ def activities():
 @login_required
 @views.route('/metrics', methods=['GET', 'POST'])
 def metrics():
-    return render_template("Metrics.html", user=current_user,  patients=get_all_patients())
+    conn = sqlite3.connect('../patients.db')
+    data = pd.read_sql_query("SELECT * from patients", conn)
+    conn.close()
+    x_axis = data['last_timestamp'].tolist()
+    y_axis = data['people_counter'].tolist()
+    chart_data = {
+        'labels': x_axis,
+        'datasets': [{
+            'label': 'No of People',
+            'data': y_axis,
+            'fill': False,
+            'borderColor': 'rgba(75,192,192,1)',
+            'lineTension': 0.1
+        }]
+    }
+    return render_template("Metrics.html", user=current_user,  patients=get_all_patients(),chart_data=chart_data)
 
 @login_required
 @views.route('/settings', methods=['GET', 'POST'])
