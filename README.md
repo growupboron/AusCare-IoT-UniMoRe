@@ -3,7 +3,13 @@
 ## Install the required packages for the flask application
 
 ```bash
-pip install -r webapp/requirements.txt
+pip install -r requirements.txt
+```
+
+## Run the application on localhost
+
+```bash
+python run.py
 ```
 
 ## Install [ngrok](https://ngrok.com/download) and add auth token
@@ -15,14 +21,14 @@ brew install ngrok/ngrok/ngrok # Mac
 ngrok config add-authtoken <token>
 ```
 
-## Run the application
+## Run the application using ngrok
 
 ```bash
-python webapp/run.py
+python run-ngrok.py
 ```
 
 ## to test the emotion recognition script
 
 ```bash
-python emotion_detect.py
+python experiments/emotion-detector-deployed/emotion_detect.py
 ```
