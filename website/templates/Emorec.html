@@ -3,12 +3,42 @@
 {% block content %}
 <h3 align="left"><b>Emotion Recognition</b></h3>
 
+<center>
 <div class="custom-control custom-switch">
   <input type="checkbox" class="custom-control-input" id="switch1">
-  <label class="custom-control-label" for="switch1">Start/Stop</label>
+  <label class="custom-control-label" for="switch1">Start / Stop (Emotion Detector)</label>
 </div>
+</center>
+
+<br>
+<br>
+
+<center>
+  <img id="latest_face" src="/latest_face" alt="Latest Face" width=40% height=auto/>
+  <img id="latest_emotion" src="/latest_emotion" alt="Latest Emotion" width=40% height=auto/>
+</center>
+
+<!--
+<center>
+<table>
+  <tr>
+    
+    <th><center>Latest Face</center></th>
+    <th><center>Latest Emotion</th>
+    </center>
+  </tr>
+  <tr>
+    <center>
+    <td><img id="latest_face" src="/latest_face" alt="Latest Face" width=50% height=auto/></center></td>
+    <center>
+    <td><img id="latest_emotion" src="/latest_emotion" alt="Latest Emotion" width=200% height=auto/></td></center>
+  </tr>  
+</table>
+</center>
+-->
 
 <script>
+
   var switchElement = document.getElementById("switch1");
   switchElement.addEventListener("change", function() {
     var xhr = new XMLHttpRequest();
@@ -16,6 +46,14 @@
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({state: this.checked}));
   });
+
+  setInterval(function() {
+    const img = document.getElementById("latest_face");
+    img.src = img.src.split("?")[0]+"?"+new Date().getTime();
+    const img1 = document.getElementById("latest_emotion");
+    img1.src = img1.src.split("?")[0]+"?"+new Date().getTime();
+    },1000);
+
 </script>
 
 <!-- <button type="button" class="btn btn-outline-dark">Dark</button>

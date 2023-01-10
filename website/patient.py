@@ -80,34 +80,36 @@ class Patient(object):
         disp = ST7735.ST7735(port=0, cs=0, dc=24, backlight=None, rst=25, width=80, height=160, rotation=90, invert=True) # Comment if not on RPi
         WIDTH = disp.width      # Comment if not on RPi
         HEIGHT = disp.height    # Comment if not on RPi
+
         if emotion == "happiness":
             emoji = '😃'
-            img = Image.open("website/emojis/happy.png")
+            img = Image.open("website/static/emojis/happy.png")
         elif emotion == "sadness":
             emoji = '😔'
-            img = Image.open("website/emojis/sad.png")
+            img = Image.open("website/static/emojis/sad.png")
         elif emotion == "anger":
             emoji = '😠'
-            img = Image.open("website/emojis/anger.png")
+            img = Image.open("website/static/emojis/anger.png")
         elif emotion == "surprise":
             emoji = '😮'
-            img = Image.open("website/emojis/surprise.png")
+            img = Image.open("website/static/emojis/surprise.png")
         elif emotion == "disgust":
             emoji = '🤮'
-            img = Image.open("website/emojis/disgust.png")
+            img = Image.open("website/static/emojis/disgust.png")
         elif emotion == "fear":
             emoji = '😨'
-            img = Image.open("website/emojis/fear.png")
+            img = Image.open("website/static/emojis/fear.png")
         elif emotion == "neutral":
             emoji = '😑'
-            img = Image.open("website/emojis/neutral.png")
+            img = Image.open("website/static/emojis/neutral.png")
             
         img = img.resize((WIDTH,HEIGHT)) # Comment if not on RPi
         #img.show()
         disp.display(img) # Comment if not on RPi
+        img.save("website/static/images/lastemotion.png")
         self.update(emotion, timestamp)
         time.sleep(1)
         #img.close()
-        img = Image.open("website/emojis/off.png")
+        img = Image.open("website/static/emojis/off.png")
         disp.display(img)           # Comment if not on RPi
         return timestamp, emoji

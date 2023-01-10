@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, send_file
 from flask_login import login_required
 from flask_security import current_user
 
@@ -6,6 +6,7 @@ from .patient import Patient
 from .patient import get_all_patients
 
 import subprocess
+import time
 
 views = Blueprint('views', __name__)
 
@@ -22,6 +23,17 @@ def home():
 @views.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     return render_template("dashboard.html", user=current_user,  patients=get_all_patients())'''
+
+@login_required
+@views.route('/latest_face')
+def latest_face():
+    #time.sleep(0.5)
+    return send_file("static/images/face.jpeg",mimetype="image/jpeg")
+
+@login_required
+@views.route('/latest_emotion')
+def latest_emotion():
+    return send_file("static/images/lastemotion.png",mimetype="image/png")
 
 @login_required
 @views.route('/emorec', methods=['GET', 'POST'])

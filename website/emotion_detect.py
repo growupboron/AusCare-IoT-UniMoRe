@@ -21,15 +21,15 @@ def emotion_mapper(pat, emotion_list):
 def take_photo():
     # take a photo with the camera
     camera = PiCamera()
-    camera.start_preview()
     camera.resolution = (640, 480) # need a well lit room
+    camera.start_preview()
     time.sleep(1)
     # vertically flipping image as PiCam is mounted invertly
-    camera.capture('website/images/face_flipped.jpeg') 
+    camera.capture('website/static/images/face_flipped.jpeg') 
     camera.close()
-    capture = cv2.imread('website/images/face_flipped.jpeg')
+    capture = cv2.imread('website/static/images/face_flipped.jpeg')
     capture = cv2.flip(capture,0)
-    cv2.imwrite('website/images/face.jpeg', capture)
+    cv2.imwrite('website/static/images/face.jpeg', capture)
 
 def emotion_detect():
     while True:
@@ -38,7 +38,7 @@ def emotion_detect():
         # take a photo
         take_photo()
         # encode the image
-        with open('website/images/face.jpeg', 'rb') as image_file:
+        with open('website/static/images/face.jpeg', 'rb') as image_file:
             encoded_image = encode_image(image_file.read())
         # send the image to the API and get the response
         response = requests.post(API, data={'api_key': API_KEY, 'api_secret': API_SECRET, 'image_base64': encoded_image},
@@ -80,7 +80,7 @@ try:
 
         encoded_images = []
 
-        for file in os.listdir('website/images'):
+        for file in os.listdir('website/static/images'):
             if file.endswith('.jpeg' or '.png' or '.jpg'):
                 with open(os.path.join('images', file), 'rb') as image_file:
                     encoded_images.append(encode_image(image_file.read()))
