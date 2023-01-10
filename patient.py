@@ -3,7 +3,8 @@ import os
 import random
 import sqlite3
 from PIL import Image
-import ST7735                       # Comment if not on RPi
+import ST7735
+import time
 
 DB_PATH = 'patients.db'
 
@@ -103,4 +104,8 @@ class Patient(object):
         img.show()
         disp.display(img) # Comment if not on RPi
         self.update(emotion, timestamp)
+        time.sleep(1)
+        img.close()
+        img = Image.open("emojis/off.png")
+        disp.display(img)
         return timestamp, emoji
