@@ -2,6 +2,7 @@ import datetime
 import os
 import random
 import sqlite3
+
 from PIL import Image
 import ST7735
 import time
@@ -106,6 +107,6 @@ class Patient(object):
         self.update(emotion, timestamp)
         time.sleep(1)
         img.close()
-        img = Image.open("emojis/off.png")
+        img = Image.open("emojis/off.png") # Comment if not on RPi
         disp.display(img)
         return timestamp, emoji

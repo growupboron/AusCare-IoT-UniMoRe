@@ -29,20 +29,22 @@ def emorec():
     return render_template("Emorec.html", user=current_user,  patients=get_all_patients())
 
 process = None
-@app.route('/process', methods=['POST'])
+@login_required
+@views.route('/process', methods=['POST'])
 def process_route():
     global process
     data = request.get_json()
+    global process
     if data['state']:
-        process = subprocess.Popen(["python", "your_script.py"])
+        process = subprocess.Popen(["python", "website/emotion_detect.py"])
     else:
         process.terminate()
     return "", 204
 
-# @login_required
-# @views.route('/evaluate', methods=['GET', 'POST'])
-# def evaluate():
-#     return render_template("Evaluate.html", user=current_user,  patients=get_all_patients())
+@login_required
+@views.route('/evaluate', methods=['GET', 'POST'])
+def evaluate():
+    return render_template("Evaluate.html", user=current_user,  patients=get_all_patients())
 
 @login_required
 @views.route('/activities', methods=['GET', 'POST'])
