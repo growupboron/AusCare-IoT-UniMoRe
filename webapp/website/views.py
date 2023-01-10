@@ -5,6 +5,8 @@ from flask_security import current_user
 from .patient import Patient
 from .patient import get_all_patients
 
+import subprocess
+
 views = Blueprint('views', __name__)
 
 p = Patient()
@@ -20,6 +22,22 @@ def home():
 @views.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     return render_template("dashboard.html", user=current_user,  patients=get_all_patients())'''
+
+@login_required
+@views.route('/emorec', methods=['GET', 'POST'])
+def emorec():
+    return render_template("Emorec.html", user=current_user,  patients=get_all_patients())
+
+process = None
+@app.route('/process', methods=['POST'])
+def process_route():
+    global process
+    data = request.get_json()
+    if data['state']:
+        process = subprocess.Popen(["python", "your_script.py"])
+    else:
+        process.terminate()
+    return "", 204
 
 # @login_required
 # @views.route('/evaluate', methods=['GET', 'POST'])
