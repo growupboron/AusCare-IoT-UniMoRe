@@ -5,6 +5,16 @@
 ```bash
 pip install -r webapp/requirements.txt
 ```
+
+## Install [ngrok](https://ngrok.com/download) and add auth token
+
+```bash
+snap install ngrok # Linux Systems
+brew install ngrok/ngrok/ngrok # Mac
+
+ngrok config add-authtoken <token>
+```
+
 ## Run the application
 
 ```bash
