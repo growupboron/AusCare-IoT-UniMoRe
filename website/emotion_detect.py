@@ -31,10 +31,48 @@ def take_photo():
     capture = cv2.flip(capture,0)
     cv2.imwrite('website/static/images/face.jpeg', capture)
 
+# class EmotionThread(Thread):
+    # def __init__(self):
+        # Thread.__init__(self)
+        # self.timestamp = None
+        # self.emotion = None
+        # self.emoji = None
+        # self.faceID = None
+
+    # def run(self):
+        # while True:
+            # # real-time emotion detection with the R-Pi
+            # # Comment if not on RPi
+            # # take a photo
+            # take_photo()
+            # # encode the image
+            # with open('website/static/images/face.jpeg', 'rb') as image_file:
+                # encoded_image = encode_image(image_file.read())
+            # # send the image to the API and get the response
+            # response = requests.post(API, data={'api_key': API_KEY, 'api_secret': API_SECRET, 'image_base64': encoded_image},
+                                     # params={'return_attributes': 'emotion'})
+            # faceID = response.json().get('faces')[0].get('face_token') #Used for number of people met
+            # emotions = response.json().get('faces')[0].get('attributes').get('emotion')
+            # emotion, emoticon = emotion_mapper(pat, emotions)
+            # #print(response.json())
+            # #print(f'timestamp: {emoticon[0]}, Emotion: {emotion}, Emoji: {emoticon[1]}, FaceID: {faceID}')
+            # timestamp = emoticon[0]
+            # emoji = emoticon[1]
+            # #print(response.json())
+            # print(f'timestamp: {timestamp}, Emotion: {emotion}, Emoji: {emoji}, FaceID: {faceID}')
+            # sleep(1)
+            # self.timestamp = timestamp
+            # self.emotion = emotion
+            # self.emoji = emoji
+            # self.faceID = faceID
+            # print (self.timestamp)
+            # #return timestamp, emotion, emoji, faceID
+
 def emotion_detect():
     while True:
         # real-time emotion detection with the R-Pi
         # Comment if not on RPi
+        global timestamp, emotion, emoji, faceID
         # take a photo
         take_photo()
         # encode the image
@@ -43,11 +81,19 @@ def emotion_detect():
         # send the image to the API and get the response
         response = requests.post(API, data={'api_key': API_KEY, 'api_secret': API_SECRET, 'image_base64': encoded_image},
                                  params={'return_attributes': 'emotion'})
-        faceID = emotions = response.json().get('faces')[0].get('face_token') #Used for number of people met
+        faceID = response.json().get('faces')[0].get('face_token') #Used for number of people met
         emotions = response.json().get('faces')[0].get('attributes').get('emotion')
         emotion, emoticon = emotion_mapper(pat, emotions)
         #print(response.json())
-        print(f'timestamp: {emoticon[0]}, Emotion: {emotion}, Emoji: {emoticon[1]}, FaceID: {faceID}')
+        #print(f'timestamp: {emoticon[0]}, Emotion: {emotion}, Emoji: {emoticon[1]}, FaceID: {faceID}')
+        timestamp = emoticon[0]
+        emoji = emoticon[1]
+        #print(response.json())
+        print(f'timestamp: {timestamp}, Emotion: {emotion}, Emoji: {emoji}, FaceID: {faceID}')
+        #data = timestamp, emotion, emoji, faceID
+        #with open('website/static/buffer.txt','w') as f:
+            #f.write(str(data))
+        #return timestamp, emotion, emoji, faceID
 
         '''
         # for testing purposes w/o picam
@@ -68,6 +114,9 @@ def emotion_detect():
 thread = Thread(target=emotion_detect)
 thread.start()
 
+# thread = EmotionThread()
+# thread.start()
+
 try:
     while True:
         pat = Patient(1, 'Billy', 10, 0, None, None)
@@ -77,14 +126,12 @@ try:
         # encode the images in base64
         def encode_image(image):
             return base64.b64encode(image)
-
         encoded_images = []
-
         for file in os.listdir('website/static/images'):
             if file.endswith('.jpeg' or '.png' or '.jpg'):
-                with open(os.path.join('images', file), 'rb') as image_file:
+                with open(os.path.join('website/static/images', file), 'rb') as image_file:
                     encoded_images.append(encode_image(image_file.read()))
-        
+                            
 except KeyboardInterrupt:
     print("Stopping...")
     print(f'\nEnded.\nTime of execution: {time.time() - start:.2} s')

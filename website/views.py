@@ -13,9 +13,7 @@ views = Blueprint('views', __name__)
 p = Patient()
 
 @views.route('/', methods=['GET', 'POST'])
-
 def home():
-
     return render_template("home.html", user=current_user)
 
 '''
