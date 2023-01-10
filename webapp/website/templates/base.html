@@ -32,15 +32,15 @@
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
           {% if user.is_authenticated %}
-          <a class="nav-item nav-link" id="home" href="/">Homepage</a>
-          <a class="nav-item nav-link" id="activities" href="/activities">Activities</a>
-          <a class="nav-item nav-link" id="metrics" href="/metrics">Metrics</a>
-          <a class="nav-item nav-link" id="settings" href="/settings">Settings</a>
-          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+              <a class="nav-item nav-link" id="home" href="/">Homepage</a>
+              <!-- <a class="nav-item nav-link" id="evaluate" href="/evaluate">Evaluate</a> -->
+              <a class="nav-item nav-link" id="activities" href="/activities">Activities</a>
+              <a class="nav-item nav-link" id="metrics" href="/metrics">Metrics</a>
+              <a class="nav-item nav-link" id="settings" href="/settings">Settings</a>
+              <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
           {% else %}
-          <a class="nav-item nav-link" id="login" href="/login">Login</a>
-          <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
-
+            <a class="nav-item nav-link" id="login" href="/login">Login</a>
+            <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
           {% endif %}
         </div>
       </div>

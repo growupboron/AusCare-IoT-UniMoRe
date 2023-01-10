@@ -21,6 +21,11 @@ def home():
 def dashboard():
     return render_template("dashboard.html", user=current_user,  patients=get_all_patients())'''
 
+# @login_required
+# @views.route('/evaluate', methods=['GET', 'POST'])
+# def evaluate():
+#     return render_template("Evaluate.html", user=current_user,  patients=get_all_patients())
+
 @login_required
 @views.route('/activities', methods=['GET', 'POST'])
 def activities():
