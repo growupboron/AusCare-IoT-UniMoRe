@@ -30,11 +30,12 @@ class Patient(object):
         self.people_counter = people_counter
         self.supervisor = supervisor
         self.emotion = last_emotion
-        # if _patient_id is in the database, load the people_counter from the database
-        self.load()
 
         self.admin = admin
         self.timestamp = last_timestamp
+        # if _patient_id is in the database, load the people_counter from the database
+        self.load()
+
         # We could define other metrics here, like the average emotion, etc.
 
     def __str__(self):
