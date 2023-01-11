@@ -19,7 +19,7 @@ class Patient(db.Model, UserMixin):
     photo = db.Column(db.LargeBinary)
     emotion = db.Column(db.String(150))
     emoji = db.Column(db.LargeBinary)
-    supervisior = db.Column(db.String(150))
+    supervisor = db.Column(db.String(150)) #supervisor
     admin = db.Column(db.String(150))
     evaluation = db.Column(db.String(150))
     face_id = db.Column(db.String(150))
