@@ -152,7 +152,7 @@ try:
         for file in os.listdir('website/static/images'):
             if file.endswith('.jpeg' or '.png' or '.jpg'):
                 with open(os.path.join('website/static/images', file), 'rb') as image_file:
-                    encoded_images.append(encode_image(image_file.read()))
+                    encoded_images.append(encode_image(image_file))
                             
 except KeyboardInterrupt:
     print("Stopping...")

@@ -7,7 +7,7 @@ from PIL import Image
 import ST7735
 import time
 
-DB_PATH = '../Database.db'
+DB_PATH = '../instance/database.db'
 
 # generates a list of all patients in the database
 def get_all_patients():
@@ -48,9 +48,9 @@ class Patient(object):
         con = sqlite3.connect(DB_PATH)
         c = con.cursor()
         # if the table patients does not exist, create it
-        c.execute("CREATE TABLE IF NOT EXISTS patients (id integer PRIMARY KEY, name text, age integer, "
+        c.execute("CREATE TABLE IF NOT EXISTS Patient (id integer PRIMARY KEY, name text, age integer, "
                   "people_counter integer, last_emotion text, last_timestamp text)")
-        c.execute("SELECT * FROM patients WHERE id = ?", (self.patient_id,))
+        c.execute("SELECT * FROM Patient WHERE id = ?", (self.patient_id,))
         row = c.fetchone()
         if row:
             self.name, self.people_counter, self.supervisor, self.emotion, self.admin, self.timestamp = row[1:]
@@ -59,7 +59,7 @@ class Patient(object):
             # if _patient_id is not in the database, create a new patient with the _patient_id and age
             con = sqlite3.connect(DB_PATH)
             c = con.cursor()
-            c.execute("Insert into patients (name, people_counter, supervisor, emotion, admin, timestamp) "
+            c.execute("Insert into Patient (name, people_counter, supervisor, emotion, admin, timestamp) "
                       "values (?, ?, ?, ?, ?, ?)", (self.name, self.people_counter, self.supervisor, self.emotion, self.admin, self.timestamp))
             con.commit()
             con.close()
