@@ -81,15 +81,15 @@ def emotion_detect():
         # send the image to the API and get the response
         response = requests.post(API, data={'api_key': API_KEY, 'api_secret': API_SECRET, 'image_base64': encoded_image},
                                  params={'return_attributes': 'emotion'})
-        faceID = response.json().get('faces')[0].get('face_token') #Used for number of people met
+        #faceID = response.json().get('faces')[0].get('face_token') #Used for number of people met
         emotions = response.json().get('faces')[0].get('attributes').get('emotion')
         emotion, emoticon = emotion_mapper(pat, emotions)
-        #print(response.json())
+        print(response.json())
         #print(f'timestamp: {emoticon[0]}, Emotion: {emotion}, Emoji: {emoticon[1]}, FaceID: {faceID}')
         timestamp = emoticon[0]
         emoji = emoticon[1]
         #print(response.json())
-        print(f'timestamp: {timestamp}, Emotion: {emotion}, Emoji: {emoji}, FaceID: {faceID}')
+        print(f'timestamp: {timestamp}, Emotion: {emotion}, Emoji: {emoji}')
         #data = timestamp, emotion, emoji, faceID
         #with open('website/static/buffer.txt','w') as f:
             #f.write(str(data))

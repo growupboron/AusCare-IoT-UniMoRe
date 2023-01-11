@@ -65,7 +65,7 @@ def activities():
 @login_required
 @views.route('/metrics', methods=['GET', 'POST'])
 def metrics():
-    conn = sqlite3.connect('../instance/database.db')
+    conn = sqlite3.connect('instance/database.db')
     data = pd.read_sql_query("SELECT * from Patient", conn)
     conn.close()
     x_axis = data['timestamp'].tolist()
