@@ -25,12 +25,12 @@ def get_all_patients():
 
 class Patient(object):
     def __init__(self, patient_id=1, name='Billy', age=10, people_counter=0, last_emotion=None, supervisor='Micheal', last_timestamp=None, admin='Micheal'):
+        
         self.patient_id = patient_id
         self.name = name
         self.people_counter = people_counter
         self.supervisor = supervisor
         self.emotion = last_emotion
-
         self.admin = admin
         self.timestamp = last_timestamp
         # if _patient_id is in the database, load the people_counter from the database
@@ -48,8 +48,8 @@ class Patient(object):
         con = sqlite3.connect(DB_PATH)
         c = con.cursor()
         # if the table patients does not exist, create it
-        c.execute("CREATE TABLE IF NOT EXISTS Patient (id integer PRIMARY KEY, name text, age integer, "
-                  "people_counter integer, last_emotion text, last_timestamp text)")
+        c.execute("CREATE TABLE IF NOT EXISTS Patient (id integer PRIMARY KEY, name text, "
+                  "people_counter integer, supervisor text, emotion text, admin text, timestamp text)")
         c.execute("SELECT * FROM Patient WHERE id = ?", (self.patient_id,))
         row = c.fetchone()
         if row:
