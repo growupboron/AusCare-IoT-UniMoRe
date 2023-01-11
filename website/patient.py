@@ -29,9 +29,10 @@ class Patient(object):
         self.name = name
         self.people_counter = people_counter
         self.supervisor = supervisor
+        self.emotion = last_emotion
         # if _patient_id is in the database, load the people_counter from the database
         self.load()
-        self.emotion = last_emotion
+
         self.admin = admin
         self.timestamp = last_timestamp
         # We could define other metrics here, like the average emotion, etc.
