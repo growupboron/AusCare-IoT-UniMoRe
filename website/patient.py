@@ -7,7 +7,7 @@ from PIL import Image
 import ST7735
 import time
 
-DB_PATH = '../instance/database.db'
+DB_PATH = 'instance/database.db'
 
 # generates a list of all patients in the database
 def get_all_patients():
