@@ -1,13 +1,16 @@
 import base64
 import os
+import sqlite3
 import time
+
 from threading import Thread
 
-from website import db
+import numpy as np
+
 from flask import g, session
 import requests
 from config import API_KEY, API_SECRET, API, DEBUG
-import patient
+
 from patient import Patient
 import cv2
 
@@ -97,7 +100,12 @@ def emotion_detect():
             encoded_emoji_img = encode_image(emoji_img.read())
 
         # save infotmations to the database
-        db.session.add(Patient(user_id=pat.patient_id, name=pat.name, timestamp=timestamp, photo=encoded_image, emotion=emotion, emoji=encoded_emoji_img, supervisor=pat.supervisor, admin=pat.admin, evaluation='good', face_id=faceID))
+        con = sqlite3.connect('website/database.db')
+        cur = con.cursor()
+        cur.execute("INSERT INTO Patient (user_id, name, people_counter, timestamp,  photo, emotion, emoji, supervisor, admin, evaluation, face_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",(pat.patient_id, pat.name, pat.people_counter+1, timestamp, encoded_image, emotion, encoded_emoji_img, pat.supervisor, pat.admin, np.random.choice(['good', 'bad']), faceID))
+        con.commit()
+        con.close()
+        # db.session.add(Patient(user_id=pat.patient_id, name=pat.name, timestamp=timestamp, photo=encoded_image, emotion=emotion, emoji=encoded_emoji_img, supervisor=pat.supervisor, admin=pat.admin, evaluation='good', face_id=faceID))
         print(f'timestamp: {timestamp}, Emotion: {emotion}, Emoji: {emoji}, FaceID: {faceID}')
 
         #data = timestamp, emotion, emoji, faceID
