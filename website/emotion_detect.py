@@ -92,8 +92,12 @@ def emotion_detect():
         emoji = emoticon[1]
         #print(response.json())
 
+        # getting the enoji image for the guessed emotion
+        with open(os.path.join('website/static/images', emotion), 'rb') as emoji_img:
+            encoded_emoji_img = encode_image(emoji_img.read())
+
         # save infotmations to the database
-        db.session.add(Patient(user_id=pat.patient_id, name=pat.name, timestamp=timestamp, photo=encoded_image, emotion=emotion, emoji=encode_image(emoji_img), supervisor=pat.supervisor, admin=pat.admin, evaluation='good', face_id=faceID))
+        db.session.add(Patient(user_id=pat.patient_id, name=pat.name, timestamp=timestamp, photo=encoded_image, emotion=emotion, emoji=encoded_emoji_img, supervisor=pat.supervisor, admin=pat.admin, evaluation='good', face_id=faceID))
         print(f'timestamp: {timestamp}, Emotion: {emotion}, Emoji: {emoji}, FaceID: {faceID}')
 
         #data = timestamp, emotion, emoji, faceID
