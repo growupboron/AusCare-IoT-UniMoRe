@@ -94,7 +94,7 @@ def metrics():
             'lineTension': 0.1
         }]
     }
-    return render_template("Metrics2.html", user=current_user, patients=get_all_patients(), chart_data=chart_data)
+    return render_template("Metrics.html", user=current_user, patients=get_all_patients(), chart_data=chart_data)
 
 
 @login_required
@@ -118,4 +118,4 @@ def update_settings():
 def update_user_in_db(user_id, new_name, new_email):
     # Update the user's information in the database
     # with the new name and email
-    db.session.query(User).filter_by(id=user_id).update({'name': new_name, 'email': new_email})
+    db.session.query(User).filter_by(id=user_id).update({'first_name': new_name, 'email': new_email})

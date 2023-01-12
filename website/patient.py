@@ -2,7 +2,7 @@ import datetime
 import os
 import random
 import sqlite3
-from Flask import g
+#from Flask import g
 from PIL import Image
 import ST7735
 import time
@@ -18,13 +18,12 @@ def get_all_patients():
     conn.close()
     patient_list = []
     for patient in patients:
-        patient_list.append(Patient(*patient))
+        patient_list.append(Patient(*patient[0:5],patient[6],patient[8],patient[9]))
     del patients
     return patient_list
 
-
 class Patient(object):
-    def __init__(self, patient_id=1, name='Billy', age=10, people_counter=0, last_emotion=None, supervisor='Micheal', last_timestamp=None, admin='Micheal'):
+    def __init__(self, patient_id=1, user_id=0, name='Billy', people_counter=0, last_timestamp=None, last_emotion=None, supervisor='Micheal', admin='Micheal'):
         
         self.patient_id = patient_id
         self.name = name
@@ -33,6 +32,7 @@ class Patient(object):
         self.emotion = last_emotion
         self.admin = admin
         self.timestamp = last_timestamp
+        self.user_id = user_id
         # if _patient_id is in the database, load the people_counter from the database
         self.load()
 
@@ -48,12 +48,15 @@ class Patient(object):
         con = sqlite3.connect(DB_PATH)
         c = con.cursor()
         # if the table patients does not exist, create it
-        c.execute("CREATE TABLE IF NOT EXISTS Patient (id integer PRIMARY KEY, name text, "
-                  "people_counter integer, supervisor text, emotion text, admin text, timestamp text)")
+        c.execute("CREATE TABLE IF NOT EXISTS Patient (id integer PRIMARY KEY, user_id integer, name text, timestamp text,"
+                  "people_counter integer, photo blob, emotion text, emoji blob, supervisor text, admin text, evaluation text, face_id text, FOREIGN KEY(user_id) REFERENCES user(id))")
+        #c.execute("CREATE TABLE IF NOT EXISTS Patient (id integer PRIMARY KEY, name text, "
+        #          "people_counter integer, supervisor text, emotion text, admin text, timestamp text)")
         c.execute("SELECT * FROM Patient WHERE id = ?", (self.patient_id,))
         row = c.fetchone()
         if row:
-            self.name, self.people_counter, self.supervisor, self.emotion, self.admin, self.timestamp = row[1:]
+            self.user_id, self.name, self.timestamp, self.people_counter, self.emotion, self.supervisor, self.admin = *row[1:5],row[6],row[8],row[9]
+            
             return
         else:
             # if _patient_id is not in the database, create a new patient with the _patient_id and age
@@ -83,7 +86,7 @@ class Patient(object):
 
         if emotion == "happiness":
             emoji = '😃'
-            img = Image.open("website/static/emojis/happy.png")
+            img = Image.open("website/static/emojis/happiness.png")
         elif emotion == "sadness":
             emoji = '😔'
             img = Image.open("website/static/emojis/sadness.png")

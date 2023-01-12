@@ -96,11 +96,11 @@ def emotion_detect():
         #print(response.json())
 
         # getting the enoji image for the guessed emotion
-        with open(os.path.join('website/static/images', emotion), 'rb') as emoji_img:
+        with open(os.path.join('website/static/emojis', emotion +'.png'), 'rb') as emoji_img:
             encoded_emoji_img = encode_image(emoji_img.read())
 
         # save infotmations to the database
-        con = sqlite3.connect('website/database.db')
+        con = sqlite3.connect('instance/database.db')
         cur = con.cursor()
         cur.execute("INSERT INTO Patient (user_id, name, people_counter, timestamp,  photo, emotion, emoji, supervisor, admin, evaluation, face_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",(pat.patient_id, pat.name, pat.people_counter+1, timestamp, encoded_image, emotion, encoded_emoji_img, pat.supervisor, pat.admin, np.random.choice(['good', 'bad']), faceID))
         con.commit()
