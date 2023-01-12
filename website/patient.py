@@ -2,7 +2,7 @@ import datetime
 import os
 import random
 import sqlite3
-
+from Flask import g
 from PIL import Image
 import ST7735
 import time

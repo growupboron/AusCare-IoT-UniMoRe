@@ -3,6 +3,8 @@ import os
 import time
 from threading import Thread
 
+from website import db
+from flask import g, session
 import requests
 from config import API_KEY, API_SECRET, API, DEBUG
 import patient
@@ -89,7 +91,11 @@ def emotion_detect():
         timestamp = emoticon[0]
         emoji = emoticon[1]
         #print(response.json())
+
+        # save infotmations to the database
+        db.session.add(Patient(user_id=pat.patient_id, name=pat.name, timestamp=timestamp, photo=encoded_image, emotion=emotion, emoji=encode_image(emoji_img), supervisor=pat.supervisor, admin=pat.admin, evaluation='good', face_id=faceID))
         print(f'timestamp: {timestamp}, Emotion: {emotion}, Emoji: {emoji}, FaceID: {faceID}')
+
         #data = timestamp, emotion, emoji, faceID
         #with open('website/static/buffer.txt','w') as f:
             #f.write(str(data))
@@ -119,7 +125,11 @@ thread.start()
 
 try:
     while True:
-        pat = Patient(1, 'Billy', 10, 0, None, None)
+        if g and g.role == 'User':
+            pat = Patient(patient_id=g.id, name=g.first_name)
+        else:
+            # dummy patient to avod the application to crash, in the future  we can just retrieve the last user in the database if no user is logged in
+            pat = Patient(1, 'Billy', 0)
         pat.load()
         image_urls = list()
         start = time.time()

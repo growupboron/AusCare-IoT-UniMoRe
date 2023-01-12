@@ -13,13 +13,15 @@ class User(db.Model, UserMixin):
 
 class Patient(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    # global id to syncronize the two tables
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     name = db.Column(db.String(150))
     timestamp = db.Column(db.DateTime(timezone=True), default=func.now())
     # photo is going to contain an image file
     photo = db.Column(db.LargeBinary)
     emotion = db.Column(db.String(150))
     emoji = db.Column(db.LargeBinary)
-    supervisor = db.Column(db.String(150)) #supervisor
+    supervisor = db.Column(db.String(150))
     admin = db.Column(db.String(150))
     evaluation = db.Column(db.String(150))
     face_id = db.Column(db.String(150))

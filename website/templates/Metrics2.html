@@ -1,0 +1,73 @@
+{% extends "base.html" %} {% block title %}Metrics{% endblock %}
+
+{% block content %}
+<h3 align="left"><b>Metrics</b></h3>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+</head>
+<body>
+    <h1>Metrics for {{ user.name }}</h1>
+    <div>
+        <canvas id="lineChart"></canvas>
+    </div>
+    <div>
+        <canvas id="pieChart"></canvas>
+    </div>
+    <script>
+        var user_id = {{ user.id }};
+        var patients = {{ patients | tojson }};
+
+        var labels = [];
+        var data_line_chart = [];
+        var data_pie_chart = {};
+
+        // process data
+        patients.forEach(patient => {
+            labels.push(patient.timestamp);
+            data_line_chart.push(patient.people_counter);
+            if(patient.emotion in data_pie_chart){
+                data_pie_chart[patient.emotion]+=1;
+            }else{
+                data_pie_chart[patient.emotion]=1;
+            }
+        });
+
+        var ctx1 = document.getElementById('lineChart').getContext('2d');
+        var lineChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'People encountered',
+                    data: data_line_chart,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        var ctx2 = document.getElementById('pieChart').getContext('2d');
+        var pieChart = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(data_pie_chart),
+                datasets: [{
+                    data: Object.values(data_pie_chart),
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)']
+}]
+}
+});
+</script>
+    </body>
+
+
+
+
+{% endblock %}
