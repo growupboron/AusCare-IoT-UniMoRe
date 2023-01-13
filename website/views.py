@@ -118,3 +118,4 @@ def update_user_in_db(user_id, new_name, new_email):
     # Update the user's information in the database
     # with the new name and email
     db.session.query(User).filter_by(id=user_id).update({'first_name': new_name, 'email': new_email})
+    db.session.commit()
