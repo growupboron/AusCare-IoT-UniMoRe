@@ -25,7 +25,7 @@
         var data_pie_chart = {};
 
         // process data
-        patients.forEach(patient => {
+        /* patients.forEach(patient => {
             labels.push(patient.timestamp);
             data_line_chart.push(patient.people_counter);
             if(patient.emotion in data_pie_chart){
@@ -33,7 +33,7 @@
             }else{
                 data_pie_chart[patient.emotion]=1;
             }
-        });
+        });*/
         var ctx1 = document.getElementById('line-chart').getContext('2d');
         var myLineChart = new Chart(ctx, {
             type: 'line',
@@ -47,11 +47,11 @@
     var colors = ["#FF6384", "#36A2EB", "#FFCE56", "#FF0000", "#00FF00", "#0000FF", "#FFFF00"];
     var data = {
     datasets: [{
-        data: Object.values(data_pie_chart),
+        data: Object.values(pie_chart_data),
         backgroundColor: colors,
         label: 'Dataset 1'
     }],
-    labels: Object.keys(data_pie_chart)
+    labels: Object.keys(pie_chart_data)
 };
     var myPieChart = new Chart(ctx2,{
         type: 'pie',

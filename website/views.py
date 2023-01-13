@@ -89,8 +89,9 @@ def metrics():
     for emotion in data['emotion']:
         pie_chart_data[emotion] += 1
 
-    x_axis = data['timestamp'].tolist()
-    y_axis = data['people_counter'].tolist()
+    '''x_axis = data['timestamp'].tolist()
+    
+    y_axis = data['people_counter'].tolist()'''
     line_chart_data = {
         'labels': user_ids,
         'datasets': [{
