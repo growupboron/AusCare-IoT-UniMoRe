@@ -81,14 +81,21 @@ def metrics():
     conn = sqlite3.connect('instance/database.db')
     data = pd.read_sql_query("SELECT * from Patient", conn)
     conn.close()
-
-    count_per_user = data.groupby('user_id').count().tolist()
+    #data = data.iloc[1:]
+    #count_per_user = data.groupby('user_id').count().tolist()
+    #count_per_user = data.groupby('user_id').count()
+    #print(data)
+    count_per_user = data['people_counter'].groupby(data['user_id']).count().tolist()
     user_ids = data['user_id'].unique().tolist()
     # pie chart data processing
-    pie_chart_data = {emotion:0 for emotion in data['emotion'].unique().tolist()}
-    for emotion in data['emotion']:
-        pie_chart_data[emotion] += 1
 
+    pie_chart_data = {emotion:0 for emotion in data['emotion'].unique().tolist() if emotion != None}
+
+    for emotion in data['emotion']:
+        if emotion != None:
+            pie_chart_data[emotion] += 1
+    print(pie_chart_data)
+    
     '''x_axis = data['timestamp'].tolist()
     
     y_axis = data['people_counter'].tolist()'''
@@ -102,6 +109,9 @@ def metrics():
             'lineTension': 0.1
         }]
     }
+    print(line_chart_data)
+    print(current_user)
+    #return render_template("Metrics.html", user=current_user, patients=get_all_patients(), chart_data=line_chart_data, pie_chart_data=pie_chart_data)
     return render_template("Metrics2.html", user=current_user, patients=get_all_patients(), line_chart_data=line_chart_data, pie_chart_data=pie_chart_data)
 
 

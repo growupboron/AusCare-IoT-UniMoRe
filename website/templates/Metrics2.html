@@ -3,29 +3,10 @@
 {% block content %}
 <h3 align="left"><b>Metrics</b></h3>
 
-
-</body>
-<head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-</head>
-<body>
-    <h1>Metrics for {{ user.name }}</h1>
-    <div>
-        <canvas id="lineChart"></canvas>
-    </div>
-    <div>
-        <canvas id="pieChart"></canvas>
-    </div>
-    <script>
-        var user_id = {{ user.id }};
-        var patients = {{ patients | tojson }};
-
-        var labels = [];
-        var data_line_chart = [];
-        var data_pie_chart = {};
-
+<!--
         // process data
-        /* patients.forEach(patient => {
+        /* var patients = {{ patients  }};
+            patients.forEach(patient => {
             labels.push(patient.timestamp);
             data_line_chart.push(patient.people_counter);
             if(patient.emotion in data_pie_chart){
@@ -34,35 +15,48 @@
                 data_pie_chart[patient.emotion]=1;
             }
         });*/
-        var ctx1 = document.getElementById('line-chart').getContext('2d');
-        var myLineChart = new Chart(ctx, {
+-->
+
+</body>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+</head>
+<body>
+    <h1>Metrics for {{ user }}</h1>
+    <canvas id="line-chart"></canvas>
+    <canvas id="pie-chart"></canvas>
+    <script>
+        
+        var ctx = document.getElementById('line-chart').getContext('2d');
+        var chart = new Chart(ctx, {
             type: 'line',
-            data: {{ chart_data|tojson|safe }},
+            data: {{ line_chart_data|tojson|safe }},
             options: {}
         });
 
-
-        var ctx2 = document.getElementById('pieChart').getContext('2d');
         // emotions are 7 in total
-    var colors = ["#FF6384", "#36A2EB", "#FFCE56", "#FF0000", "#00FF00", "#0000FF", "#FFFF00"];
-    var data = {
-    datasets: [{
-        data: Object.values(pie_chart_data),
-        backgroundColor: colors,
-        label: 'Dataset 1'
-    }],
-    labels: Object.keys(pie_chart_data)
-};
-    var myPieChart = new Chart(ctx2,{
-        type: 'pie',
-        data: data,
-        options: {
-            responsive: true
-        }
-    });
-
-</script>
-    </body>
+        var colors = ["#FF6384", "#36A2EB", "#FFCE56", "#FF0000", "#00FF00", "#0000FF", "#FFFF00"];
+        var data_pie = {
+            datasets: [{
+            data: Object.values(pie_chart_data),
+            backgroundColor: colors,
+            label: 'Dataset 1'
+            }],
+        labels: Object.keys(pie_chart_data)
+        };
+        
+        var ctx2 = document.getElementById('pie-chart').getContext('2d');
+        var myPieChart = new Chart(ctx2,{
+            type: 'pie',
+            data: data_pie,
+            options: {
+                responsive: true
+            }
+        });
+        
+    </script>
+    
+</body>
 
 
 
