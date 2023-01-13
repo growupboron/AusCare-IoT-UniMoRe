@@ -134,8 +134,8 @@ thread.start()
 
 try:
     while True:
-        if g and g.role == 'User':
-            pat = Patient(patient_id=g.id, name=g.first_name)
+        if session and session['user_role'] == 'User':
+            pat = Patient(patient_id=session['user_id'], name=session['user_name'])
         else:
             # dummy patient to avod the application to crash, in the future  we can just retrieve the last user in the database if no user is logged in
             pat = Patient(1, 'Billy', 0)
