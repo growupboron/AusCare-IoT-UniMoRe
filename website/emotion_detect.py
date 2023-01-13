@@ -26,15 +26,12 @@ def emotion_mapper(pat, emotion_list):
 def take_photo():
     # take a photo with the camera
     camera = PiCamera()
+    camera.vflip = True            # vertically flipping image as PiCam is mounted invertly
     camera.resolution = (640, 480) # need a well lit room
     camera.start_preview()
     time.sleep(1)
-    # vertically flipping image as PiCam is mounted invertly
-    camera.capture('website/static/images/face_flipped.jpeg') 
+    camera.capture('website/static/images/face.jpeg')
     camera.close()
-    capture = cv2.imread('website/static/images/face_flipped.jpeg')
-    capture = cv2.flip(capture,0)
-    cv2.imwrite('website/static/images/face.jpeg', capture)
 
 # class EmotionThread(Thread):
     # def __init__(self):
