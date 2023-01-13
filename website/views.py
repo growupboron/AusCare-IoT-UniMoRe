@@ -45,12 +45,11 @@ def latest_emotion():
 @login_required
 @views.route('/emorec', methods=['GET', 'POST'])
 def emorec():
-    return render_template("Emorec.html", user=current_user, patients=get_all_patients())
-
+    patients=get_all_patients()
+    latest_update=patients[len(patients)-1]
+    return render_template("Emorec.html", user=current_user, latest_update=latest_update)
 
 process = None
-
-
 @login_required
 @views.route('/process', methods=['POST'])
 def process_route():
