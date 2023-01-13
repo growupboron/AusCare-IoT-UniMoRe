@@ -81,19 +81,27 @@ def metrics():
     conn = sqlite3.connect('instance/database.db')
     data = pd.read_sql_query("SELECT * from Patient", conn)
     conn.close()
+
+    count_per_user = data.groupby('user_id').count().tolist()
+    user_ids = data['user_id'].unique().tolist()
+    # pie chart data processing
+    pie_chart_data = {emotion:0 for emotion in data['emotion'].unique().tolist()}
+    for emotion in data['emotion']:
+        pie_chart_data[emotion] += 1
+
     x_axis = data['timestamp'].tolist()
     y_axis = data['people_counter'].tolist()
-    chart_data = {
-        'labels': x_axis,
+    line_chart_data = {
+        'labels': user_ids,
         'datasets': [{
             'label': 'No of People',
-            'data': y_axis,
+            'data': count_per_user,
             'fill': False,
             'borderColor': 'rgba(75,192,192,1)',
             'lineTension': 0.1
         }]
     }
-    return render_template("Metrics.html", user=current_user, patients=get_all_patients(), chart_data=chart_data)
+    return render_template("Metrics2.html", user=current_user, patients=get_all_patients(), line_chart_data=line_chart_data, pie_chart_data=pie_chart_data)
 
 
 @login_required

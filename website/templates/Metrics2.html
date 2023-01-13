@@ -34,7 +34,7 @@
                 data_pie_chart[patient.emotion]=1;
             }
         });
-        var ctx = document.getElementById('line-chart').getContext('2d');
+        var ctx1 = document.getElementById('line-chart').getContext('2d');
         var myLineChart = new Chart(ctx, {
             type: 'line',
             data: {{ chart_data|tojson|safe }},
