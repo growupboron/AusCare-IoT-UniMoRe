@@ -99,23 +99,103 @@ function closeNav() {
                         <tr>
                             <th scope="col">Patient ID</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Emotion</th>
                             <th scope="col">Timestamp</th>
+                            <th scope="col">Photo</th>
+                            <th scope="col">Emotion</th>
+                            <th scope="col">Emoji</th>
                             <th scope="col">People Encountered</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for patient in patients %}
-
                         <tr>
                             <td>{{ patient.patient_id}}</td>
                             <td>{{ patient.name }}</td>
-                            <td>{{ patient.emotion }}</td>
                             <td>{{ patient.timestamp }}</td>
+                          
+          
+<!--
+                            <td>
+                              <script>
+                                function resizeBase64Img(base64, newWidth, newHeight) {
+                                    return new Promise((resolve, reject)=>{
+                                        var canvas = document.createElement("canvas");
+                                        canvas.style.width = newWidth.toString()+"px";
+                                        canvas.style.height = newHeight.toString()+"px";
+                                        let context = canvas.getContext("2d");
+                                        let img = document.createElement("img");
+                                        img.src = base64;
+                                        img.onload = function () {
+                                            context.scale(newWidth/img.width,  newHeight/img.height);
+                                            context.drawImage(img, 0, 0); 
+                                            resolve(canvas.toDataURL());               
+                                        }
+                                    });
+                                }
+
+                                var image = "{{ patient.photo }}".slice(6, "{{ patient.photo }}".length-6);
+                                while (image.length % 4) {
+                                image += "=";
+                                }
+                                let base64 = "data:image/png;base64," + image;
+
+                                resizeBase64Img(base64, 100, 100).then(resized=>{
+                                  document.body.append("After: ");
+                                  let img = document.createElement("img");
+                                  img.src = resized;
+                                  document.body.appendChild(img);
+                                });
+                              </script>   
+                              <div id="photo"></div>
+                            </td>
+                            
+-->
+                            <td>
+                              <script>
+                                var image = "{{ patient.photo }}".slice(6, "{{ patient.photo }}".length-6);
+                                while (image.length % 4) {
+                                image += "=";
+                                }
+                                var img = document.createElement("img");
+                                img.src = "data:image/png;base64," + image;
+                                document.write("<td>");
+                                document.write(img.outerHTML);
+                                document.write("</td>");
+                              </script>   
+                              <div id="photo"></div>
+                            </td>
+<!--
+                            <td>{{ patient.photo }}</td>
+-->
+                            <td>{{ patient.emotion }}</td>
+                            
+<!--
+                            <td>{{ patient.emoji }}</td>
+-->
+                            <td>
+                              <script>
+                                var image = "{{ patient.emoji }}".slice(6, "{{ patient.emoji }}".length-6);
+                                while (image.length % 4) {
+                                image += "=";
+                                }
+                                var img = document.createElement("img");
+                                img.src = "data:image/png;base64," + image;
+                                document.write("<td>");
+                                document.write(img.outerHTML);
+                                document.write("</td>");
+                              </script>   
+                              <div id="emoji"></div>
+                            </td>
+                            
                             <td>{{ patient.people_counter }}</td>
-                        </tr>
+                        </tr>                   
+                      
                         {% endfor %}
                     </tbody>
                 </table>
+    
+
+                            
+                  
 
 {% endblock %}

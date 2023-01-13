@@ -9,6 +9,8 @@ DB_NAME = "../instance/database.db"
 
 def create_app():
     app = Flask(__name__)
+    app.jinja_env.lstrip_blocks = True
+    app.jinja_env.trim_blocks = True
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
