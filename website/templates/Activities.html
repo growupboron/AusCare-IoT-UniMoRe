@@ -179,9 +179,9 @@ function closeNav() {
                                 }
                                 var img = document.createElement("img");
                                 img.src = "data:image/png;base64," + image;
+                                img.width = img.naturalWidth / 2;
+                                img.height = img.naturalHeight / 2;
                                 document.write("<td>");
-                                img.style.width = "50px";
-                                img.style.height = "50px";
                                 document.write(img.outerHTML);
                                 document.write("</td>");
                               </script>   

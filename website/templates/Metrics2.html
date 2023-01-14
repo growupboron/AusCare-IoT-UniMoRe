@@ -36,19 +36,19 @@
 
         // emotions are 7 in total
         var colors = ["#FF6384", "#36A2EB", "#FFCE56", "#FF0000", "#00FF00", "#0000FF", "#FFFF00"];
-        var data_pie = {
+        /*var data_pie = {
             datasets: [{
             data: Object.values(pie_chart_data),
             backgroundColor: colors,
             label: 'Dataset 1'
             }],
         labels: Object.keys(pie_chart_data)
-        };
+        };*/
         
         var ctx2 = document.getElementById('pie-chart').getContext('2d');
         var myPieChart = new Chart(ctx2,{
             type: 'pie',
-            data: data_pie,
+            data: {{ pie_chart_data|tojson|safe }},
             options: {
                 responsive: true
             }

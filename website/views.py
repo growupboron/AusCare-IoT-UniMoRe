@@ -45,11 +45,14 @@ def latest_emotion():
 @login_required
 @views.route('/emorec', methods=['GET', 'POST'])
 def emorec():
-    patients=get_all_patients()
-    latest_update=patients[len(patients)-1]
+    patients = get_all_patients()
+    latest_update = patients[len(patients) - 1]
     return render_template("Emorec.html", user=current_user, latest_update=latest_update)
 
+
 process = None
+
+
 @login_required
 @views.route('/process', methods=['POST'])
 def process_route():
@@ -81,24 +84,24 @@ def metrics():
     conn = sqlite3.connect('instance/database.db')
     data = pd.read_sql_query("SELECT * from Patient", conn)
     conn.close()
-    #data = data.iloc[1:]
-    #count_per_user = data.groupby('user_id').count().tolist()
-    #count_per_user = data.groupby('user_id').count()
-    #print(data)
+    # data = data.iloc[1:]
+    # count_per_user = data.groupby('user_id').count().tolist()
+    # count_per_user = data.groupby('user_id').count()
+    # print(data)
     count_per_user = data['people_counter'].groupby(data['user_id']).count().tolist()
     user_ids = data['user_id'].unique().tolist()
     # pie chart data processing
 
-    pie_chart_data = {emotion:0 for emotion in data['emotion'].unique().tolist() if emotion != None}
+    pie_data = {emotion: 0 for emotion in data['emotion'].unique().tolist() if emotion != None}
 
     for emotion in data['emotion']:
         if emotion != None:
-            pie_chart_data[emotion] += 1
-    print(pie_chart_data)
-    
+            pie_data[emotion] += 1
+    print(pie_data)
+
     '''x_axis = data['timestamp'].tolist()
-    
     y_axis = data['people_counter'].tolist()'''
+
     line_chart_data = {
         'labels': user_ids,
         'datasets': [{
@@ -109,10 +112,24 @@ def metrics():
             'lineTension': 0.1
         }]
     }
+    pie_chart_data = {
+        'labels': list(pie_data.keys()),
+        'datasets': [{
+            'data': list(pie_data.values()),
+            'backgroundColor': ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)',
+                                'rgba(252, 201, 186, 0.2)'],
+            'borderColor': ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
+                            'rgba(252, 201, 186, 1)'],
+            'borderWidth': 1
+        }]
+    }
     print(line_chart_data)
     print(current_user)
-    #return render_template("Metrics.html", user=current_user, patients=get_all_patients(), chart_data=line_chart_data, pie_chart_data=pie_chart_data)
-    return render_template("Metrics2.html", user=current_user, patients=get_all_patients(), line_chart_data=line_chart_data, pie_chart_data=pie_chart_data)
+    # return render_template("Metrics.html", user=current_user, patients=get_all_patients(), chart_data=line_chart_data, pie_chart_data=pie_chart_data)
+    return render_template("Metrics2.html", user=current_user, patients=get_all_patients(),
+                           line_chart_data=line_chart_data, pie_chart_data=pie_chart_data)
 
 
 @login_required
