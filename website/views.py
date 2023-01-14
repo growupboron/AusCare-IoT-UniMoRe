@@ -84,10 +84,7 @@ def metrics():
     conn = sqlite3.connect('instance/database.db')
     data = pd.read_sql_query("SELECT * from Patient", conn)
     conn.close()
-    # data = data.iloc[1:]
-    # count_per_user = data.groupby('user_id').count().tolist()
-    # count_per_user = data.groupby('user_id').count()
-    # print(data)
+
     count_per_user = data['people_counter'].groupby(data['user_id']).count().tolist()
     user_ids = data['user_id'].unique().tolist()
     # pie chart data processing
@@ -98,15 +95,19 @@ def metrics():
         if emotion != None:
             pie_data[emotion] += 1
     print(pie_data)
-
-    '''x_axis = data['timestamp'].tolist()
-    y_axis = data['people_counter'].tolist()'''
+    
+    # x_axis : days                            (14/01/2022)
+    # y_axis : no of timestamps in that day    (14/01/2022 00:00 23:59)
+    
+    data = 
+    x_axis = data['timestamp'].tolist()
+    y_axis = data['people_counter'].tolist()
 
     line_chart_data = {
-        'labels': user_ids,
+        'labels': x_axis,
         'datasets': [{
             'label': 'No of People',
-            'data': count_per_user,
+            'data': y_axis,
             'fill': False,
             'borderColor': 'rgba(75,192,192,1)',
             'lineTension': 0.1
