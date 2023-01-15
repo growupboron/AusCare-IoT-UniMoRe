@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, render_template, request, send_file, redirect, flash, url_for, g
 from flask_login import login_required
 from flask_security import current_user
@@ -15,6 +17,12 @@ import time
 views = Blueprint('views', __name__)
 
 p = Patient()
+
+
+def convert_timestamp(timestamp):
+    # Convert the timestamp to a readable format
+    dt_object = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
+    return dt_object.date()
 
 
 @views.route('/', methods=['GET', 'POST'])
@@ -84,30 +92,34 @@ def metrics():
     conn = sqlite3.connect('instance/database.db')
     data = pd.read_sql_query("SELECT * from Patient", conn)
     conn.close()
+    # list of unique dates in the database except None values --> the x axis of our line chart
+    dates = data['timestamp'].unique()
+    dates = pd.Series(dates).dropna().tolist()
+    data['timestamp'].apply(convert_timestamp)
+    data['timestamp'] = data['timestamp'].apply(convert_timestamp)
+    # list of the number of people met for each day in the dates list --> the y axis of our line chart
+    counters = data['people_counter'].groupby(data['timestamp']).count().tolist()
+    print(counters)
 
-    count_per_user = data['people_counter'].groupby(data['user_id']).count().tolist()
-    user_ids = data['user_id'].unique().tolist()
     # pie chart data processing
-
     pie_data = {emotion: 0 for emotion in data['emotion'].unique().tolist() if emotion != None}
 
     for emotion in data['emotion']:
         if emotion != None:
             pie_data[emotion] += 1
     print(pie_data)
-    
+
     # x_axis : days                            (14/01/2022)
     # y_axis : no of timestamps in that day    (14/01/2022 00:00 23:59)
-    
-    data = 
+
     x_axis = data['timestamp'].tolist()
     y_axis = data['people_counter'].tolist()
 
     line_chart_data = {
-        'labels': x_axis,
+        'labels': dates,
         'datasets': [{
             'label': 'No of People',
-            'data': y_axis,
+            'data': counters,
             'fill': False,
             'borderColor': 'rgba(75,192,192,1)',
             'lineTension': 0.1
@@ -147,7 +159,7 @@ def update_settings():
     new_email = request.form['email']
     # update user's information in the database
     update_user_in_db(user.id, new_name, new_email)
-    flash('Settings updated successfully!')
+    flash('Settings updated successfully!', category='success')
     return redirect('/settings')
 
 
