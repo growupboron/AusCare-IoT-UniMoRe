@@ -51,7 +51,8 @@ class Patient(object):
         c = con.cursor()
         # if the table patients does not exist, create it
         c.execute("CREATE TABLE IF NOT EXISTS Patient (id integer PRIMARY KEY, user_id integer, name text, timestamp text,"
-                  "people_counter integer, photo blob, emotion text, emoji blob, supervisor text, admin text, evaluation text, face_id text, FOREIGN KEY(user_id) REFERENCES user(id))")
+                  "people_counter integer, photo blob, emotion text, emoji blob, supervisor text, admin text, "
+                  "evaluation text, face_id text, FOREIGN KEY(user_id) REFERENCES user(id))")
         c.execute("SELECT * FROM Patient WHERE id = ?", (str(self.patient_id),))
         row = c.fetchone()
         if row:
