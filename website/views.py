@@ -122,7 +122,7 @@ def metrics():
     line_chart_data = {
         'labels': dates,
         'datasets': [{
-            'label': 'No of People',
+            'label': 'Activities',
             'data': counters,
             'fill': False,
             'borderColor': 'rgba(75,192,192,1)',
