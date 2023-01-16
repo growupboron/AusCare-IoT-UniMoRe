@@ -95,11 +95,12 @@ def metrics():
     conn = sqlite3.connect('instance/database.db')
     data = pd.read_sql_query("SELECT * from Patient", conn)
     conn.close()
+    data['timestamp'].apply(convert_timestamp)
+    data['timestamp'] = data['timestamp'].apply(convert_timestamp)
     # list of unique dates in the database except None values --> the x axis of our line chart
     dates = data['timestamp'].unique()
     dates = pd.Series(dates).dropna().tolist()
-    data['timestamp'].apply(convert_timestamp)
-    data['timestamp'] = data['timestamp'].apply(convert_timestamp)
+
     # list of the number of people met for each day in the dates list --> the y axis of our line chart
     counters = data['people_counter'].groupby(data['timestamp']).count().tolist()
     print(counters)
