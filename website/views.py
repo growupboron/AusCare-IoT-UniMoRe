@@ -16,7 +16,7 @@ import time
 
 views = Blueprint('views', __name__)
 
-p = Patient()
+#p = Patient()
 
 
 def convert_timestamp(timestamp):
