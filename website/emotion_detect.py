@@ -150,7 +150,7 @@ try:
             cur.execute("SELECT * FROM user WHERE role = 'User' ORDER BY id DESC")
             last_user = cur.fetchone()
             conn.close()
-            pat = Patient(patient_id=last_user[0], name=last_user[3])
+            pat = Patient(patient_id=100, user_id=last_user[0], name=last_user[3])
         pat.load()
         # print all the attributes of the patient
         #print(pat.__dict__)
