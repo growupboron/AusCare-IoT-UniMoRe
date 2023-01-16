@@ -30,11 +30,11 @@ def take_photo():
     camera = PiCamera()
     camera.vflip = True  # vertically flipping image as PiCam is mounted invertly
     camera.resolution = (640, 480)  # need a well lit room
-    camera.start_preview()
+    #camera.start_preview()
     time.sleep(1)
     camera.capture('website/static/images/face.jpeg')
+    #camera.stop_preview()
     camera.close()
-
 
 # class EmotionThread(Thread):
 # def __init__(self):
@@ -91,7 +91,7 @@ def emotion_detect():
         emotions = response.json().get('faces')[0].get('attributes').get('emotion')
         emotion, emoticon = emotion_mapper(pat, emotions)
         # print(response.json())
-        # print(f'timestamp: {emoticon[0]}, Emotion: {emotion}, Emoji: {emoticon[1]}, FaceID: {faceID}')
+        #print(f'timestamp: {emoticon[0]}, Emotion: {emotion}, Emoji: {emoticon[1]}, FaceID: {faceID}')
         timestamp = emoticon[0]
         emoji = emoticon[1]
         # print(response.json())
@@ -153,7 +153,7 @@ try:
             pat = Patient(patient_id=last_user[0], name=last_user[3])
         pat.load()
         # print all the attributes of the patient
-        print(pat.__dict__)
+        #print(pat.__dict__)
         image_urls = list()
         start = time.time()
 
