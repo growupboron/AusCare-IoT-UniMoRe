@@ -21,7 +21,10 @@ views = Blueprint('views', __name__)
 
 def convert_timestamp(timestamp):
     # Convert the timestamp to a readable format
-    dt_object = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
+    if timestamp!=None:
+        dt_object = datetime.strptime(str(timestamp), '%Y-%m-%d %H:%M:%S.%f')
+    else:
+        dt_object = datetime.strptime('2000-01-01 00:00:00.01','%Y-%m-%d %H:%M:%S.%f')
     return dt_object.date()
 
 
