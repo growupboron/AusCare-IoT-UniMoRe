@@ -147,7 +147,7 @@ try:
         else:
             conn = sqlite3.connect('instance/database.db', timeout=15)
             cur = conn.cursor()
-            cur.execute("SELECT * FROM user WHERE role = 'User' ORDER BY id DESC")
+            cur.execute("SELECT * FROM patient ORDER BY user_id DESC")
             last_user = cur.fetchone()
             conn.close()
             pat = Patient(patient_id=100, user_id=last_user[0], name=last_user[3])
