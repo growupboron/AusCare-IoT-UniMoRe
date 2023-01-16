@@ -13,7 +13,7 @@ DB_PATH = 'instance/database.db'
 def get_all_patients():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("Select * FROM Patient")
+    c.execute("Select * FROM Patient LIMIT 15")
     patients = c.fetchall()
     conn.close()
     patient_list = []
