@@ -13,7 +13,7 @@ DB_PATH = 'instance/database.db'
 def get_all_patients():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("Select * FROM Patient WHERE timestamp > datetime('now', '-15 day') ORDER BY id DESC LIMIT 15")
+    c.execute("Select * FROM Patient WHERE timestamp > datetime('now', '-30 day') ORDER BY id DESC LIMIT 15")
     patients = c.fetchall()
     conn.close()
     patient_list = []

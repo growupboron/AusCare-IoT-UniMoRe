@@ -97,10 +97,12 @@ function closeNav() {
 <table class="table table-striped">
                     <thead>
                         <tr>
+<!--
                             <th scope="col">Patient ID</th>
                             <th scope="col">Name</th>
+-->
                             <th scope="col">Timestamp</th>
-                            <!--th scope="col">Photo</th-->
+                            <th scope="col">Photo</th>
                             <th scope="col">Emotion</th>
                             <th scope="col">Emoji</th>
                             <th scope="col">People Encountered</th>
@@ -109,8 +111,10 @@ function closeNav() {
                     <tbody>
                         {% for patient in patients %}
                         <tr>
+<!--
                             <td>{{ patient.patient_id}}</td>
                             <td>{{ patient.name }}</td>
+-->
                             <td>{{ patient.timestamp }}</td>
                           
           
@@ -150,7 +154,6 @@ function closeNav() {
                             </td>
                             
 -->
-                            <!--td>
                               <script>
                                 var image = "{{ patient.photo }}".slice(6, "{{ patient.photo }}".length-6);
                                 while (image.length % 4) {
@@ -158,13 +161,12 @@ function closeNav() {
                                 }
                                 var img = document.createElement("img");
                                 img.src = "data:image/png;base64," + image;
-                                img.width = img.naturalWidth / 2;
-                                img.height = img.naturalHeight / 2;
+                                img.width = img.naturalWidth / 6;
+                                img.height = img.naturalHeight / 6;
                                 document.write("<td>");
                                 document.write(img.outerHTML);
                                 document.write("</td>");
                               </script>   
-                            </td-->
 <!--
                             <td>{{ patient.photo }}</td>
 -->
@@ -173,7 +175,6 @@ function closeNav() {
 <!--
                             <-td>{{ patient.emoji }}</td>
 -->
-                            <td>
                               <script>
                                 var image = "{{ patient.emoji }}".slice(6, "{{ patient.emoji }}".length-6);
                                 while (image.length % 4) {
@@ -187,7 +188,6 @@ function closeNav() {
                                 document.write(img.outerHTML);
                                 document.write("</td>");
                               </script>   
-                            </td>
                             
                             <td>{{ patient.people_counter }}</td>
                         </tr>                   

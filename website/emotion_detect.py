@@ -133,6 +133,9 @@ def emotion_detect():
             #time.sleep(5)
         '''
 
+# encode the images in base64
+def encode_image(image):
+    return base64.b64encode(image)
 
 thread = Thread(target=emotion_detect)
 thread.start()
@@ -148,21 +151,14 @@ try:
             conn = sqlite3.connect('instance/database.db', timeout=15)
             cur = conn.cursor()
             cur.execute("SELECT * FROM patient ORDER BY user_id DESC")
-            last_user = cur.fetchone()
+            last_user = cur.fetchone()[:-2]
             conn.close()
             pat = Patient(*last_user)
         pat.load()
         # print all the attributes of the patient
-        #print(pat.__dict__)
+        print(pat.__dict__)
         image_urls = list()
         start = time.time()
-
-
-        # encode the images in base64
-        def encode_image(image):
-            return base64.b64encode(image)
-
-
         encoded_images = []
         for file in os.listdir('website/static/images'):
             if file.endswith('.jpeg' or '.png' or '.jpg'):
