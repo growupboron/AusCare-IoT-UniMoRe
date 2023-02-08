@@ -91,7 +91,7 @@ def emotion_detect():
         emotions = response.json().get('faces')[0].get('attributes').get('emotion')
         emotion, emoticon = emotion_mapper(pat, emotions)
         # print(response.json())
-        #print(f'timestamp: {emoticon[0]}, Emotion: {emotion}, Emoji: {emoticon[1]}, FaceID: {faceID}')
+        print(f'timestamp: {emoticon[0]}, Emotion: {emotion}, Emoji: {emoticon[1]}, FaceID: {faceID}')
         timestamp = emoticon[0]
         emoji = emoticon[1]
         # print(response.json())
@@ -156,7 +156,7 @@ try:
             pat = Patient(*last_user)
         pat.load()
         # print all the attributes of the patient
-        print(pat.__dict__)
+        #print(pat.__dict__)
         image_urls = list()
         start = time.time()
         encoded_images = []
