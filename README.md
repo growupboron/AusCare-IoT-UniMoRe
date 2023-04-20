@@ -1,8 +1,8 @@
 # AusCare-IoT-UniMoRe
 
-![](Prototype.jpg)
+![](Prototype.png)
 
-[Presentation](AusCare_UniMoRe.pdf) [Youtube](https://youtu.be/_-Oh0AxJfTw)
+[Presentation](AusCare_UniMoRe.pdf) || [Youtube](https://youtu.be/_-Oh0AxJfTw)
 
 ## Wiring connection of [the display (ST7735S Display)](https://jakew.me/st7735-pi/)
 
