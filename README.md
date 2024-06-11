@@ -1,8 +1,11 @@
 # AusCare-IoT-UniMoRe
 
-![](Prototype.png)
+This is a course project for the postgraduate level course of [IOT and 3D Intelligent Systems](https://unimore.coursecatalogue.cineca.it/insegnamenti/2022/25794/2021/10003/10300?coorte=2022&schemaid=20417) taught at [DIEF, UniMoRe](https://inginf.unimore.it/laurea-magistrale-ing-inf/).
 
-[Presentation](AusCare_UniMoRe.pdf) || [Youtube](https://youtu.be/_-Oh0AxJfTw)
+- Project Presentation: [Presentation](AusCare_UniMoRe.pdf)
+- Project Demo: [Youtube](https://youtu.be/_-Oh0AxJfTw)
+
+![](Prototype.png) <img src="https://github.com/growupboron/AusCare/blob/master/AusCare.png" width="214">
 
 ## Wiring connection of [the display (ST7735S Display)](https://jakew.me/st7735-pi/)
 
